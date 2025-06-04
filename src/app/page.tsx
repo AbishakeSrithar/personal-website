@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
     <div className="overflow-scroll h-screen snap-y snap-mandatory">
@@ -8,7 +6,7 @@ export default function Home() {
       <div className="snap-center grid grid-rows-[2fr_5fr_2fr] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
         <h1>Hello World!</h1>
         <div className="grid grid-rows-[2fr_5fr] items-center justify-items-center" id="main">
-          <p className="text-center">My name is Abishake!<br></br>I'm a programmer/gamer B)</p>
+          <p className="text-center">My name is Abishake!<br></br>Im a programmer/gamer B)</p>
           <p className="text-center">Welcome to my little corner of the internet</p>
         </div>
         <div id="footer">
@@ -25,10 +23,10 @@ export default function Home() {
           <h1 className="text-4xl">Gaming!</h1>
         </div>
         <div className="" id="main">
-          <p className="m-5">I'm an avid gamer and have been since I was 5yrs old</p>
+          <p className="m-5">Im an avid gamer and have been since I was 5yrs old</p>
           <br></br>
           <div className="m-5">
-            <p>Games I'm currently playing:</p>
+            <p>Games Im currently playing:</p>
             <br></br>
             <ul>
               <li>- Valorant</li>
@@ -38,7 +36,7 @@ export default function Home() {
           </div>
           
           <div className="m-5">
-            <p>Games I've enjoyed in the past:</p>
+            <p>Games Ive enjoyed in the past:</p>
             <br></br>
             <ul>
               <li>- Call of Duty (MW2/3, BO1/2/3)</li>
