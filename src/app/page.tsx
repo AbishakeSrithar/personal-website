@@ -18,12 +18,31 @@ export default function Home() {
       </div>
 
       
-      <div className="snap-center grid grid-rows-[2fr_6fr_2fr] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 text-xs">
+      <div className="snap-center flex flex-col items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 text-xs">
         <div>
           <h1 className="text-4xl">Gaming!</h1>
         </div>
         <div className="" id="main">
           <p className="m-5">Im an avid gamer and have been since I was 5yrs old</p>
+          <div className="">
+            <div className="w-[70vw] md:w-[40vw] aspect-video mx-auto overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 scrollbar-hide">
+              <iframe className="aspect-video snap-center"
+                src="https://www.youtube.com/embed/jODUBXovhy4"
+              ></iframe>
+              <iframe className="aspect-video snap-center block md:hidden"
+                src="https://www.youtube.com/embed/v=BLPdvGmxNE0"
+              ></iframe>
+              <iframe className="aspect-video snap-center block md:hidden"
+                src="https://www.youtube.com/embed/tU_Fvmqf9ww"
+              ></iframe>
+              <iframe className="aspect-video snap-center block md:hidden"
+                src="https://www.youtube.com/embed/_v_Gpn70BSQ"
+              ></iframe>
+              <iframe className="aspect-video snap-center block md:hidden"
+                src="https://www.youtube.com/embed/jafPUwXoUOs"
+              ></iframe>
+            </div>
+            </div>
           <br></br>
           <div className="m-5">
             <p>Games Im currently playing:</p>
@@ -43,7 +62,6 @@ export default function Home() {
               <li>- Fortnite</li>
               <li>- Hollow Knight</li>
               <li>- Hades 1/2</li>
-              <li>- Portal 1/2</li>
             </ul>
           </div>
         </div>
