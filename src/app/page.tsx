@@ -1,4 +1,5 @@
 import PacmanGame from '@/components/game';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -70,10 +71,10 @@ export default function Home() {
           <div className="" id="main">
             <p className="break-words w-[80vw] md:w-[30vw]">Im a Programmer by career and hobby! :)</p>
               <div className="w-[70vw] md:w-[30vw] mx-auto overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 scrollbar-hide">
-                <a href='https://github.com/AbishakeSrithar/fitness-tracker-backend' target="_blank" className="snap-center shrink-0 w-full aspect-video"><img src="/images/fitnessTracker.png" alt="Fitness Tracker"></img></a>
-                <a href='https://github.com/AbishakeSrithar/OddsCheckerScraper' target="_blank" className="snap-center shrink-0 w-full aspect-video"><img src="/images/oddsScraper.png" alt="Odds Scraper"></img></a>
+                <a href='https://github.com/AbishakeSrithar/fitness-tracker-backend' target="_blank" className="snap-center shrink-0 w-full aspect-video"><Image src="/images/fitnessTracker.png" alt="Fitness Tracker" width={1280} height={720} className="object-cover"/></a>
+                <a href='https://github.com/AbishakeSrithar/OddsCheckerScraper' target="_blank" className="snap-center shrink-0 w-full aspect-video"><Image src="/images/oddsScraper.png" alt="Odds Scraper" width={1280} height={720} className="object-cover"/></a>
               </div>
-            <p className="break-words w-[80vw] md:w-[30vw]" >I've been programming for 4 years and have recently made it my mission to make some personal projects from scratch.
+            <p className="break-words w-[80vw] md:w-[30vw]" >Ive been programming for 4 years and have recently made it my mission to make some personal projects from scratch.
             </p>
             <div className="pt-10">
               <p>Projects I want to make by the end of 2025:</p>
