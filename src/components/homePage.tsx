@@ -21,7 +21,7 @@ export default function HomePage() {
         </div>
         <div
           id="footer"
-          className="grid grid-cols-4 grid-rows-3 gap-4 m w-[60vw] md:w-[30vw]"
+          className="grid grid-cols-4 grid-rows-2 gap-4 m w-[60vw] md:w-[30vw]"
         >
           <Image
             src="/images/insta1.png"
@@ -108,7 +108,7 @@ export default function HomePage() {
             height={250}
             className=""
           /> */}
-          <Image
+          {/* <Image
             src="/images/insta5.png"
             alt="Profile Pic 5"
             width={250}
@@ -135,7 +135,7 @@ export default function HomePage() {
             width={250}
             height={250}
             className=""
-          />
+          /> */}
         </div>
       </div>
     </div>
