@@ -21,9 +21,9 @@ export default function HomePage() {
         </div>
         <div
           id="footer"
-          className="grid grid-cols-4 grid-rows-2 gap-4 m w-[60vw] md:w-[30vw]"
+          className="grid grid-cols-2 grid-rows-2 gap-4 m-5 w-[60vw] md:w-[15vw]"
         >
-          <Image
+          {/* <Image
             src="/images/insta1.png"
             alt="Profile Pic 5"
             width={250}
@@ -50,15 +50,15 @@ export default function HomePage() {
             width={250}
             height={250}
             className=""
-          />
+          /> */}
           
-          <Image
+          {/* <Image
             src="/images/food.png"
             alt="Profile Pic 5"
             width={250}
             height={250}
             className=""
-          />
+          /> */}
           <Image
             src="/images/rgbpc.png"
             alt="Profile Pic 5"
@@ -93,7 +93,7 @@ export default function HomePage() {
             width={250}
             height={250}
             className=""
-          />
+          /> */}
           <Image
             src="/images/me_4.png"
             alt="Profile Pic 7"
@@ -101,13 +101,6 @@ export default function HomePage() {
             height={250}
             className=""
           />
-          <Image
-            src="/images/me_4.png"
-            alt="Profile Pic 8"
-            width={250}
-            height={250}
-            className=""
-          /> */}
           {/* <Image
             src="/images/insta5.png"
             alt="Profile Pic 5"
