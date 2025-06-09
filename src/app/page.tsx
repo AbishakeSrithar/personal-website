@@ -1,99 +1,116 @@
-import PacmanGame from '@/components/game';
-import Image from 'next/image';
-
+"use client";
+import CodingCarousel from "@/components/codingCarousel";
+import PacmanGame from "@/components/game";
+import GamingCarousel from "@/components/gamingCarousel";
+import Image from "next/image";
+import TypewriterComp from "@/components/typewriter";
 export default function Home() {
   return (
     <main>
+      {/* ------------------------ Home ----------------------- */}
       <div className="overflow-scroll h-screen snap-y snap-mandatory">
         <PacmanGame />
-        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-          <div className=''>
+        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20">
+          <div className="">
             <h1 className="text-2xl">Hello World!</h1>
           </div>
           <div className="items-center justify-items-center" id="main">
-            <p className="text-center">My name is Abishake!<br></br>Im a programmer/gamer B)</p>
-            <p className="text-center">Welcome to my little corner of the internet</p>
+            <h3>
+              <TypewriterComp />
+            </h3>
+            <p className="text-center m-5">
+              Welcome to my little corner of the internet!
+            </p>
           </div>
-          <div id="footer" className=''>
-            <a href="https://github.com/AbishakeSrithar" className="text-green-500 hover:text-green-500 active:text-blue-500 underline m-5" target="_blank">Github</a>
-            <a href="https://www.youtube.com/@Lilshakee" className="text-red-500 hover:text-red-500 active:text-blue-500 underline m-5" target="_blank">YouTube</a>
-            <p className="text-center mt-3 text-blue-500 underline">Discord:</p>
-            <p className="text-center">Lil_shakee</p>
-          </div>
-        </div>
-        
-        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 text-xs">
-          <div>
-            <h1 className="text-4xl">Gaming!</h1>
-          </div>
-          <div className="" id="main">
-            <p className="m-5">Im an avid gamer and have been since I was 5yrs old</p>
-              <div className="w-[70vw] md:w-[30vw] aspect-video mx-auto overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 scrollbar-hide">
-                <iframe className="aspect-video snap-center"
-                  src="https://www.youtube.com/embed/jODUBXovhy4"
-                ></iframe>
-                <iframe className="aspect-video snap-center block md:hidden"
-                  src="https://www.youtube.com/embed/v=BLPdvGmxNE0"
-                ></iframe>
-                <iframe className="aspect-video snap-center block md:hidden"
-                  src="https://www.youtube.com/embed/tU_Fvmqf9ww"
-                ></iframe>
-                <iframe className="aspect-video snap-center block md:hidden"
-                  src="https://www.youtube.com/embed/_v_Gpn70BSQ"
-                ></iframe>
-                <iframe className="aspect-video snap-center block md:hidden"
-                  src="https://www.youtube.com/embed/jafPUwXoUOs"
-                ></iframe>
-              </div>
-            <br></br>
-            <div className="m-5">
-              <p>Games Im playing this year:</p>
-              <br></br>
-              <ul>
-                <li>[x] Valorant</li>
-                <li>[x] Dead Cells</li>
-                <li>[?] Silksong</li>
-              </ul>
-              <br></br>
-            </div>
-          </div>
-          <div id="footer" className="items-center justify-items-center">
-            <h1 className="text-center text-xs">Checkout my Gaming Channel: </h1>
-            <br></br>
-            <a href="https://www.youtube.com/@Lilshakee" className="text-red-500 hover:text-red-500 active:text-blue-500 underline" target="_blank">YouTube</a>
+          <div
+            id="footer"
+            className="grid grid-cols-2 grid-rows-2 gap-4 w-[60vw] md:w-[15vw]"
+          >
+            <Image
+              src="/images/me_1.png"
+              alt="Profile Pic 1"
+              width={250}
+              height={250}
+              className=""
+            />
+            <Image
+              src="/images/me_2.png"
+              alt="Profile Pic 1"
+              width={250}
+              height={250}
+              className=""
+            />
+            <Image
+              src="/images/me_3.png"
+              alt="Profile Pic 1"
+              width={250}
+              height={250}
+              className=""
+            />
+            <Image
+              src="/images/me_4.png"
+              alt="Profile Pic 1"
+              width={250}
+              height={250}
+              className=""
+            />
           </div>
         </div>
 
-        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 text-xs">
+        {/* ------------------------ Games ----------------------- */}
+        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20 text-xs">
+          <div>
+            <h1 className="text-4xl">Gaming!</h1>
+          </div>
+          <GamingCarousel />
+          <div id="footer" className="items-center justify-items-center">
+            <h1 className="text-center text-xs">
+              Checkout my Gaming Channel:{" "}
+            </h1>
+            <br></br>
+            <a
+              href="https://www.youtube.com/@Lilshakee"
+              className="text-red-500 hover:text-red-500 active:text-blue-500 underline"
+              target="_blank"
+            >
+              YouTube
+            </a>
+          </div>
+        </div>
+
+        {/* ------------------------ Code ----------------------- */}
+        <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20 text-xs">
           <div>
             <h1 className="text-4xl">Coding!</h1>
           </div>
           <div className="" id="main">
-            <p className="break-words w-[80vw] md:w-[30vw]">Im a Programmer by career and hobby! :)</p>
-              <div className="w-[70vw] md:w-[30vw] mx-auto overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 scrollbar-hide">
-                <a href='https://github.com/AbishakeSrithar/fitness-tracker-backend' target="_blank" className="snap-center shrink-0 w-full aspect-video"><Image src="/images/fitnessTracker.png" alt="Fitness Tracker" width={1280} height={720} className="object-cover"/></a>
-                <a href='https://github.com/AbishakeSrithar/OddsCheckerScraper' target="_blank" className="snap-center shrink-0 w-full aspect-video"><Image src="/images/oddsScraper.png" alt="Odds Scraper" width={1280} height={720} className="object-cover"/></a>
-              </div>
-            <p className="break-words w-[80vw] md:w-[30vw]" >Ive been programming for 4 years and have recently made it my mission to make some personal projects from scratch.
+            <p className="break-words w-[80vw] md:w-[30vw]">
+              Im a Programmer by career and hobby! :)
             </p>
-            <div className="pt-10">
-              <p>Projects I want to make by the end of 2025:</p>
-              <br></br>
-              <div className=''>
-                <ul className="">
+            <CodingCarousel />
+            <div className="pt-7 text-center">
+              <p>Personal Project Roadmap:</p>
+              <br />
+              <div className="flex justify-center">
+                <ul className="list-disc text-left">
                   <li>[x] Personal Website</li>
                   <li>[x] Fitness Tracker</li>
                   <li>[ ] Habit Tracker</li>
                   <li>[ ] 2D Platformer Game</li>
+                  <li>[ ] 3D ThreeJS Game</li>
                 </ul>
               </div>
-              <br></br>
             </div>
           </div>
           <div id="footer" className="items-center justify-items-center">
             <h1 className="text-center text-xs">Checkout my Github: </h1>
-            <br></br>
-            <a href="https://github.com/AbishakeSrithar" className="text-green-500 active:text-blue-500 underline" target="_blank">Github</a>
+            <a
+              href="https://github.com/AbishakeSrithar"
+              className="text-green-500 active:text-blue-500 underline"
+              target="_blank"
+            >
+              Github
+            </a>
           </div>
         </div>
       </div>
