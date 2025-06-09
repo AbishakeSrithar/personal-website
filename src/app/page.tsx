@@ -19,7 +19,6 @@ export default function Home() {
             <h1 className="text-center text-xs">
               Checkout my Gaming Channel:{" "}
             </h1>
-            <br></br>
             <a
               href="https://www.youtube.com/@Lilshakee"
               className="text-red-500 hover:text-red-500 active:text-blue-500 underline"
@@ -48,8 +47,7 @@ export default function Home() {
                   <li>[x] Personal Website</li>
                   <li>[x] Fitness Tracker</li>
                   <li>[ ] Habit Tracker</li>
-                  <li>[ ] 2D Platformer Game</li>
-                  <li>[ ] 3D ThreeJS Game</li>
+                  <li>[ ] Platformer Game</li>
                 </ul>
               </div>
             </div>
