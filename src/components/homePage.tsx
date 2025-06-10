@@ -1,12 +1,9 @@
 "use client";
-import Image from "next/image";
-import PacmanGame from "@/components/game";
 import TypewriterComp from "@/components/typewriter";
 
 export default function HomePage() {
   return (
-    <div className="">
-      <PacmanGame />
+    <div className="relative min-h-screen">
       <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20">
         <div className="">
           <h1 className="text-2xl">Hello World!</h1>
@@ -19,46 +16,10 @@ export default function HomePage() {
             Welcome to my little corner of the internet!
           </p>
         </div>
-        <div
+        {/* <div
           id="footer"
           className="grid grid-cols-2 grid-rows-2 gap-4 m-5 w-[60vw] md:w-[15vw]"
         >
-          {/* <Image
-            src="/images/insta1.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta2.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta3.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta4.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          /> */}
-          
-          {/* <Image
-            src="/images/food.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          /> */}
           <Image
             src="/images/rgbpc.png"
             alt="Profile Pic 5"
@@ -80,20 +41,6 @@ export default function HomePage() {
             height={250}
             className=""
           />
-          {/* <Image
-            src="/images/me_2.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/me_3.png"
-            alt="Profile Pic 6"
-            width={250}
-            height={250}
-            className=""
-          /> */}
           <Image
             src="/images/me_4.png"
             alt="Profile Pic 7"
@@ -101,35 +48,7 @@ export default function HomePage() {
             height={250}
             className=""
           />
-          {/* <Image
-            src="/images/insta5.png"
-            alt="Profile Pic 5"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta6.png"
-            alt="Profile Pic 6"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta7.png"
-            alt="Profile Pic 7"
-            width={250}
-            height={250}
-            className=""
-          />
-          <Image
-            src="/images/insta8.png"
-            alt="Profile Pic 8"
-            width={250}
-            height={250}
-            className=""
-          /> */}
-        </div>
+        </div> */}
       </div>
     </div>
   );

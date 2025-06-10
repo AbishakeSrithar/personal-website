@@ -2,10 +2,13 @@
 import CodingCarousel from "@/components/codingCarousel";
 import GamingCarousel from "@/components/gamingCarousel";
 import HomePage from "@/components/homePage";
+import ThreeJSGame from "@/components/threeJSGame";
+
 export default function Home() {
   return (
     <main>
       {/* ------------------------ Home ----------------------- */}
+      <ThreeJSGame />
       <div className="overflow-scroll h-screen snap-y snap-mandatory">
         <HomePage/>
 
@@ -34,8 +37,8 @@ export default function Home() {
           <div>
             <h1 className="text-4xl">Coding!</h1>
           </div>
-          <div className="" id="main">
-            <p className="break-words w-[80vw] md:w-[30vw]">
+          <div className="items-center justify-items-center" id="main">
+            <p className="text-centre m-3">
               Im a Programmer by career and hobby! :)
             </p>
             <CodingCarousel />

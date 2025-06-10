@@ -18,8 +18,8 @@ export default function GamingCarousel() {
     scrollToSecondSlide(carouselRef2);
   }, []);
   return (
-    <div className="" id="main">
-      <p className="m-5">Im an avid gamer and have been since I was 5yrs old XD</p>
+    <div className="items-center justify-items-center" id="main">
+      <p className="text-center m-5">Im an avid gamer and have been since I was 5yrs old XD</p>
       <div
        ref={carouselRef1}
         className="flex md:hidden w-[80vw] mx-auto overflow-x-auto snap-x snap-mandatory gap-4 p-4 scrollbar-hide"
@@ -33,7 +33,7 @@ export default function GamingCarousel() {
         ].map((id) => (
           <iframe
             key={id}
-            className="aspect-video w-[60vw] snap-center"
+            className="aspect-video w-[60vw] snap-center rounded-md"
             src={`https://www.youtube.com/embed/${id}`}
             allowFullScreen
           />
@@ -50,7 +50,7 @@ export default function GamingCarousel() {
           (id) => (
             <iframe
               key={id}
-              className="aspect-video w-[60vw] snap-center"
+              className="aspect-video w-[60vw] snap-center rounded-md"
               src={`https://www.youtube.com/embed/${id}`}
               allowFullScreen
             />
@@ -74,7 +74,7 @@ export default function GamingCarousel() {
         ].map((id) => (
           <iframe
             key={id}
-            className="aspect-video w-[18vw] h-[9vw]"
+            className="aspect-video w-[18vw] h-[9vw] rounded-md"
             src={`https://www.youtube.com/embed/${id}`}
             allowFullScreen
           />

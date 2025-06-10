@@ -12,7 +12,7 @@ const selfProjects = [
   {
     href: "https://github.com/AbishakeSrithar/personal-website",
     img: "/images/newPersonalWebsite.png",
-    alt: "Personal Website[Self]",
+    alt: "Personal Website [Self]",
   },
   {
     href: "https://github.com/AbishakeSrithar/OddsCheckerScraper",
@@ -72,14 +72,14 @@ export default function CodingCarousel() {
             key={`self_${href}`}
             href={href}
             target="_blank"
-            className="shrink-0 snap-center w-[60vw] aspect-video"
+            className="shrink-0 snap-center w-[60vw]"
           >
             <Image
               src={img}
               alt={alt}
               width={1280}
               height={720}
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full rounded-md"
             />
           </a>
         ))}
@@ -93,14 +93,14 @@ export default function CodingCarousel() {
             key={`guided_${href}`}
             href={href}
             target="_blank"
-            className="shrink-0 snap-center w-[60vw] aspect-video"
+            className="shrink-0 snap-center w-[60vw]"
           >
             <Image
               src={img}
               alt={alt}
               width={1280}
               height={720}
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full rounded-md"
             />
             
           </a>
@@ -114,14 +114,14 @@ export default function CodingCarousel() {
             key={`comb_${href}`}
             href={href}
             target="_blank"
-            className="relative group aspect-video w-full overflow-hidden rounded-xl"
+            className="relative group w-full overflow-hidden rounded-xl"
           >
             <Image
               src={img}
               alt={alt}
               width={1280}
               height={720}
-              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 rounded-md"
             />
             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center text-white text-sm md:text-lg text-center px-4">
               {alt}
