@@ -38,8 +38,8 @@ export default function Home() {
             <h1 className="text-4xl">Coding!</h1>
           </div>
           <div className="items-center justify-items-center" id="main">
-            <p className="text-centre m-3">
-              Im a Programmer by career and hobby! :)
+            <p className="text-center m-3">
+              Im a Fullstack Programmer! Also quite enjoy problem solving and maths! :) 
             </p>
             <CodingCarousel />
             <div className="pt-7 text-center">
