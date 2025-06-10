@@ -14,7 +14,7 @@ function Particles({
 }) {
   const particlesRef = useRef<THREE.Points>(null!)
 
-  const count = 10000
+  const count = 3000
 
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3)
