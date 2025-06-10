@@ -20,7 +20,7 @@ export default function Home() {
           <GamingCarousel />
           <div id="footer" className="items-center justify-items-center">
             <h1 className="text-center text-xs">
-              Checkout my Gaming Channel:{" "}
+              Checkout my YouTube:
             </h1>
             <a
               href="https://www.youtube.com/@Lilshakee"

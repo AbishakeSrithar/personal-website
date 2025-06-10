@@ -60,15 +60,12 @@ export default function GamingCarousel() {
 
       {/* Desktop grid (hidden on mobile) */}
       <div
-       className="hidden md:grid grid-cols-3 grid-rows-3 gap-4 p-4 w-[60vw]">
+       className="hidden md:grid grid-cols-3 grid-rows-2 gap-4 p-4 w-[60vw]">
         {[
           "PjKA3vr4VUk",
           "qrZ9cE9lgDw",
-          "BLPdvGmxNE0",
           "tU_Fvmqf9ww",
           "jafPUwXoUOs",
-          "zMExoBifjVA",
-          "E4oYfE_MGx8",
           "kpx1LyQ7-6Y",
           "K1K0dgYsov0",
         ].map((id) => (
@@ -80,6 +77,18 @@ export default function GamingCarousel() {
           />
         ))}
       </div>
+      <div className="pt-7 text-center">
+              <p>2025 Favourites:</p>
+              <br />
+              <div className="flex justify-center">
+                <ul className="list-disc text-left">
+                  <li>Valorant</li>
+                  <li>Dead Cells</li>
+                  <li>Hades 2</li>
+                  <li>SilkSong (plz)</li>
+                </ul>
+              </div>
+            </div>
     </div>
   );
 }
