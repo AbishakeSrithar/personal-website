@@ -9,7 +9,7 @@ export default function Home() {
     <main>
       {/* ------------------------ Home ----------------------- */}
       <ThreeJSGame />
-      <div className="overflow-scroll h-screen snap-y snap-mandatory">
+      <div className="overflow-scroll h-screen snap-y snap-mandatory scrollbar-hide">
         <HomePage/>
 
         {/* ------------------------ Games ----------------------- */}
