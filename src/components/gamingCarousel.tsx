@@ -28,7 +28,6 @@ export default function GamingCarousel() {
           "tU_Fvmqf9ww",
           "PjKA3vr4VUk",
           "qrZ9cE9lgDw",
-          "BLPdvGmxNE0",
           "jafPUwXoUOs",
         ].map((id) => (
           <iframe
@@ -42,10 +41,11 @@ export default function GamingCarousel() {
       <div 
        ref={carouselRef2}
       className="flex md:hidden w-[80vw] mx-auto overflow-x-auto snap-x snap-mandatory gap-4 p-4 scrollbar-hide">
-        {["E4oYfE_MGx8",
+        {[
          "kpx1LyQ7-6Y",
           "K1K0dgYsov0",
-           "zMExoBifjVA"
+           "zMExoBifjVA",
+           "-jOcZrrKwK4"
           ].map(
           (id) => (
             <iframe
