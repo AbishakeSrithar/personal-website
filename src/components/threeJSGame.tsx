@@ -103,7 +103,7 @@ function Particles({
       const x1 = posArray[i3]
       const x2 = posArray[i3 + 3]
       posArray[i3 + 1] = Math.sin(elapsedTime + x1) + 2.5
-      posArray[i3 + 4] = Math.cos(elapsedTime + x2) - 1.7
+      posArray[i3 + 4] = Math.cos(elapsedTime + x2) - 2.2
       // const y = posArray[i3 + 2]
       // posArray[i3 + 1] = Math.tan(Math.sqrt(((x * elapsedTime * 0.05)**2 + (y * elapsedTime * 0.1)**2))) / (1/x + 1/y) // AKA THE SEIZURE INDUCER
     }
