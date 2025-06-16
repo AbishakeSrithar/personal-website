@@ -25,10 +25,10 @@ export default function GamingCarousel() {
         className="flex md:hidden w-[80vw] mx-auto overflow-x-auto snap-x snap-mandatory gap-4 p-4 scrollbar-hide"
       >
         {[
-          "tU_Fvmqf9ww",
-          "PjKA3vr4VUk",
-          "qrZ9cE9lgDw",
-          "jafPUwXoUOs",
+          "wmUl96hXzGU",
+          "cXvJV8O4bTw",
+          "nYAQy4UoxvU",
+          "dY_sSaFejxI",
         ].map((id) => (
           <iframe
             key={id}
@@ -42,10 +42,10 @@ export default function GamingCarousel() {
        ref={carouselRef2}
       className="flex md:hidden w-[80vw] mx-auto overflow-x-auto snap-x snap-mandatory gap-4 p-4 scrollbar-hide">
         {[
-         "kpx1LyQ7-6Y",
-          "K1K0dgYsov0",
-           "zMExoBifjVA",
-           "-jOcZrrKwK4"
+         "us71WgK1UIA",
+           "f_quWPxmgnc",
+          "oWuubvRDKwE",
+           "tU_Fvmqf9ww",
           ].map(
           (id) => (
             <iframe
@@ -62,12 +62,12 @@ export default function GamingCarousel() {
       <div
        className="hidden md:grid grid-cols-3 grid-rows-2 gap-4 p-4 w-[60vw]">
         {[
-          "PjKA3vr4VUk",
-          "qrZ9cE9lgDw",
-          "tU_Fvmqf9ww",
-          "jafPUwXoUOs",
-          "kpx1LyQ7-6Y",
-          "K1K0dgYsov0",
+          "wmUl96hXzGU",
+          "cXvJV8O4bTw",
+          "nYAQy4UoxvU",
+          "us71WgK1UIA",
+          "f_quWPxmgnc",
+          "oWuubvRDKwE",
         ].map((id) => (
           <iframe
             key={id}
