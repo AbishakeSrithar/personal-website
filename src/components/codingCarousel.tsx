@@ -10,14 +10,14 @@ const selfProjects = [
     alt: "Fitness Tracker [Self]",
   },
   {
+    href: "https://github.com/AbishakeSrithar/AimlabsVTTracker",
+    img: "/images/aimlabsTracker.png",
+    alt: "Aim Training Tracker",
+  },
+  {
     href: "https://github.com/AbishakeSrithar/personal-website",
     img: "/images/newPersonalWebsite.png",
     alt: "Personal Website [Self]",
-  },
-  {
-    href: "https://github.com/AbishakeSrithar/OddsCheckerScraper",
-    img: "/images/oddsScraper.png",
-    alt: "Odds Scraper [Self]",
   },
 ];
 const guidedProjects = [
