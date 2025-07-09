@@ -7,34 +7,34 @@ const selfProjects = [
   {
     href: "https://github.com/AbishakeSrithar/fitness-tracker-backend",
     img: "/images/fitnessTracker.png",
-    alt: "Fitness Tracker [Self]",
+    alt: "Fitness Tracker Kotlin [Self]",
   },
   {
     href: "https://github.com/AbishakeSrithar/AimlabsVTTracker",
     img: "/images/aimlabsTracker.png",
-    alt: "Aim Training Tracker [Self]",
+    alt: "Aim Training Tracker TypeScript [Self]",
   },
   {
     href: "https://github.com/AbishakeSrithar/personal-website",
     img: "/images/newPersonalWebsite.png",
-    alt: "Personal Website [Self]",
+    alt: "Personal Website TypeScript [Self]",
   },
 ];
 const guidedProjects = [
   {
     href: "https://github.com/AbishakeSrithar/pong-in-assembly",
     img: "/images/pongasm.png",
-    alt: "Pong in Assembly [Guided]",
+    alt: "Pong Assembly [Guided]",
   },
   {
     href: "https://github.com/AbishakeSrithar/ChessProject",
     img: "/images/chess.png",
-    alt: "Chess in Java [Guided]",
+    alt: "Chess Java [Guided]",
   },
   {
     href: "https://github.com/AbishakeSrithar/SpaceShooter",
     img: "/images/minigames.png",
-    alt: "Mini Games [Guided]",
+    alt: "Mini Games Python [Guided]",
   },
 ];
 
@@ -113,7 +113,6 @@ export default function CodingCarousel() {
           {/* Desktop Grid */}
           <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-4 p-4 w-[60vw] mx-auto">
             {[...selfProjects, ...guidedProjects]
-              .slice(0, 6)
               .map(({ href, img, alt }) => (
                 <a
                   key={`comb_${href}`}

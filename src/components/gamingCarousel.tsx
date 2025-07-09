@@ -24,7 +24,10 @@ export default function GamingCarousel() {
       <div>
         <h1 className="text-4xl">Gaming!</h1>
       </div>
-      <div className="flex flex-col items-center justify-center text-center" id="main">
+      <div
+        className="flex flex-col items-center justify-center text-center"
+        id="main"
+      >
         <p className="text-center m-5">
           Im an avid gamer and have been since I was 5yrs old XD
         </p>
@@ -59,8 +62,8 @@ export default function GamingCarousel() {
           )}
         </div>
 
-        {/* Desktop grid (hidden on mobile) */}
-        <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-4 p-4 w-[60vw]">
+        {/* Desktop grid */}
+        <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-4 p-4 w-[60vw] mx-auto">
           {[
             "wmUl96hXzGU",
             "cXvJV8O4bTw",
@@ -69,12 +72,19 @@ export default function GamingCarousel() {
             "f_quWPxmgnc",
             "oWuubvRDKwE",
           ].map((id) => (
-            <iframe
+            <div
               key={id}
-              className="aspect-video w-[18vw] h-[9vw] rounded-md"
-              src={`https://www.youtube.com/embed/${id}`}
-              allowFullScreen
-            />
+              className="relative group w-full overflow-hidden rounded-xl"
+            >
+              <iframe
+                src={`https://www.youtube.com/embed/${id}`}
+                allowFullScreen
+                className="w-full h-full aspect-video rounded-md"
+              />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center text-white text-sm md:text-lg text-center px-4">
+                YouTube Video
+              </div>
+            </div>
           ))}
         </div>
         <div className="pt-7 text-center">
