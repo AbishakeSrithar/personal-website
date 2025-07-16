@@ -81,9 +81,6 @@ export default function GamingCarousel() {
                 allowFullScreen
                 className="w-full h-full aspect-video rounded-md"
               />
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center text-white text-sm md:text-lg text-center px-4">
-                YouTube Video
-              </div>
             </div>
           ))}
         </div>
