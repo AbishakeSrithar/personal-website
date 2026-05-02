@@ -7,6 +7,8 @@ import ThreeJSGame from "@/components/threeJSGame";
 export default function Home() {
   return (
     <main>
+      <div className="crt-overlay" />
+      <div className="crt-vignette" />
         {/* ------------------------ All Pages ----------------------- */}
       <ThreeJSGame />
       <div className="overflow-scroll h-screen snap-y snap-mandatory scrollbar-hide">

@@ -6,7 +6,7 @@ export default function HomePage() {
     <div className="relative min-h-screen">
       <div className="snap-center flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20">
         <div className="">
-          <h1 className="text-2xl">Hello World!</h1>
+          <h1 className="text-2xl glitch" data-text="Hello World!">Hello World!</h1>
         </div>
         <div className="items-center justify-items-center" id="main">
           <h3>
