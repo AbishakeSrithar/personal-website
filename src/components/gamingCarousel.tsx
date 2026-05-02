@@ -1,15 +1,7 @@
 "use client";
 
-const videoIds = [
-  "wmUl96hXzGU",
-  "cXvJV8O4bTw",
-  "nYAQy4UoxvU",
-  "dY_sSaFejxI",
-  "us71WgK1UIA",
-  "f_quWPxmgnc",
-  "oWuubvRDKwE",
-  "tU_Fvmqf9ww",
-];
+const row1 = ["wmUl96hXzGU", "cXvJV8O4bTw", "nYAQy4UoxvU", "dY_sSaFejxI"];
+const row2 = ["us71WgK1UIA", "f_quWPxmgnc", "oWuubvRDKwE", "tU_Fvmqf9ww"];
 
 function SectionLabel({ label }: { label: string }) {
   return (
@@ -44,6 +36,18 @@ function VideoCard({ id }: { id: string }) {
   );
 }
 
+function VideoRow({ ids }: { ids: string[] }) {
+  return (
+    <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-3 scrollbar-hide pb-1">
+      {ids.map((id) => (
+        <div key={id} className="shrink-0 snap-start w-4/5 sm:w-[calc(50%-6px)]">
+          <VideoCard id={id} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function GamingCarousel() {
   return (
     <div className="snap-center flex flex-col items-center justify-center min-h-screen px-6 py-10 sm:px-12 gap-5">
@@ -52,27 +56,29 @@ export default function GamingCarousel() {
         Im an avid gamer and have been since I was 5yrs old XD
       </p>
 
-      <div className="w-full max-w-5xl">
-        <SectionLabel label="// CLIPS & HIGHLIGHTS" />
-
-        {/* Mobile: horizontal carousel (all 8) */}
-        <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-3 scrollbar-hide pb-1">
-          {videoIds.map((id) => (
-            <div key={id} className="shrink-0 snap-start w-4/5 sm:w-[calc(50%-6px)]">
-              <VideoCard id={id} />
-            </div>
-          ))}
+      <div className="w-full max-w-5xl flex flex-col gap-4">
+        {/* Mobile: two labeled carousel rows */}
+        <div>
+          <SectionLabel label="// CLIPS & HIGHLIGHTS" />
+          <VideoRow ids={row1} />
+        </div>
+        <div>
+          <SectionLabel label="// MORE CLIPS" />
+          <VideoRow ids={row2} />
         </div>
 
         {/* Desktop: 3×2 grid (first 6) */}
-        <div className="hidden md:grid grid-cols-3 gap-3">
-          {videoIds.slice(0, 6).map((id) => (
-            <VideoCard key={id} id={id} />
-          ))}
+        <div className="hidden md:block -mt-4">
+          <SectionLabel label="// CLIPS & HIGHLIGHTS" />
+          <div className="grid grid-cols-3 gap-3">
+            {[...row1, ...row2].slice(0, 6).map((id) => (
+              <VideoCard key={id} id={id} />
+            ))}
+          </div>
         </div>
       </div>
 
-<a
+      <a
         href="https://www.youtube.com/@Lilshakee"
         target="_blank"
         className="border border-red-500/60 text-red-400 px-6 py-1.5 text-xs tracking-widest
