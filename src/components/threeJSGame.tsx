@@ -227,7 +227,7 @@ function SphereParticles({ paused, colorKey, count }: { paused: boolean; colorKe
   }, [positions, colors])
 
   const tex = useParticleTexture()
-  const material = usePointsMaterial(tex)
+  const material = usePointsMaterial(tex, 0.03)
 
   useFrame(({ clock }) => {
     if (!particlesRef.current || paused) return
@@ -235,7 +235,7 @@ function SphereParticles({ paused, colorKey, count }: { paused: boolean; colorKe
     const pos = particlesRef.current.geometry.attributes.position.array as Float32Array
     const m   = metaRef.current
 
-    const pulse = 1.8 + Math.sin(t * 0.9) * 0.8
+    const pulse = 3.2 + Math.sin(t * 0.9) * 1.0
     const rotY  = t * 0.15
 
     for (let i = 0; i < count; i++) {
