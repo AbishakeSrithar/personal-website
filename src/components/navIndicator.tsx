@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const SECTIONS = ['HOME', 'CODING', 'GAMING']
+const SECTIONS = ['HOME', 'CODING', 'GAMING', 'SHHH']
 
 export default function NavIndicator() {
   const [active, setActive] = useState(0)

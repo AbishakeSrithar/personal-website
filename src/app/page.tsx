@@ -4,6 +4,7 @@ import CursorTrail from "@/components/cursorTrail";
 import GamingCarousel from "@/components/gamingCarousel";
 import HomePage from "@/components/homePage";
 import NavIndicator from "@/components/navIndicator";
+import ShhhPage from "@/components/shhhPage";
 import ThreeJSGame from "@/components/threeJSGame";
 
 export default function Home() {
@@ -22,6 +23,8 @@ export default function Home() {
           <CodingCarousel />
         {/* ------------------------ Games Page ---------------------- */}
           <GamingCarousel />
+        {/* ------------------------ Shhh Page ----------------------- */}
+          <ShhhPage />
       </div>
     </main>
   );
