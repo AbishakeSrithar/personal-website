@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 const COMMANDS: Record<string, string> = {
-  snake: '/snake',
+  snake:   '/snake',
+  serious: '/serious',
 }
 
 export default function ShhhPage() {

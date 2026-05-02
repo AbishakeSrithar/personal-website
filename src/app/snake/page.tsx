@@ -49,9 +49,9 @@ export default function SnakePage() {
     started: false,
   })
 
-  const [score,   setScore]   = useState(0)
-  const [dead,    setDead]    = useState(false)
-  const [started, setStarted] = useState(false)
+  const [score, setScore]   = useState(0)
+  const [,      setDead]    = useState(false)
+  const [,      setStarted] = useState(false)
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
