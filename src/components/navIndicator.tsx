@@ -26,7 +26,7 @@ export default function NavIndicator() {
   }
 
   return (
-    <div className="fixed right-5 top-1/2 -translate-y-1/2 z-[9997] flex flex-col gap-4">
+    <div className="fixed right-5 top-5 z-[9997] flex flex-col gap-4">
       {SECTIONS.map((label, i) => (
         <button
           key={label}
