@@ -2,6 +2,7 @@
 import CodingCarousel from "@/components/codingCarousel";
 import GamingCarousel from "@/components/gamingCarousel";
 import HomePage from "@/components/homePage";
+import NavIndicator from "@/components/navIndicator";
 import ThreeJSGame from "@/components/threeJSGame";
 
 export default function Home() {
@@ -11,7 +12,8 @@ export default function Home() {
       <div className="crt-vignette" />
         {/* ------------------------ All Pages ----------------------- */}
       <ThreeJSGame />
-      <div className="overflow-scroll h-screen snap-y snap-mandatory scrollbar-hide">
+      <NavIndicator />
+      <div id="snap-container" className="overflow-scroll h-screen snap-y snap-mandatory scrollbar-hide">
         {/* ------------------------ Home Page ----------------------- */}
           <HomePage />
         {/* ------------------------ Code Page ----------------------- */}
