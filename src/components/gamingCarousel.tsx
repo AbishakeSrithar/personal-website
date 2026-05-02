@@ -38,7 +38,7 @@ function VideoCard({ id }: { id: string }) {
 
 function VideoRow({ ids }: { ids: string[] }) {
   return (
-    <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-3 scrollbar-hide pb-1">
+    <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 scrollbar-hide pb-1">
       {ids.map((id) => (
         <div key={id} className="shrink-0 snap-start w-4/5 sm:w-[calc(50%-6px)]">
           <VideoCard id={id} />
@@ -58,17 +58,19 @@ export default function GamingCarousel() {
 
       <div className="w-full max-w-5xl flex flex-col gap-4">
         {/* Mobile: two labeled carousel rows */}
-        <div>
-          <SectionLabel label="// CLIPS & HIGHLIGHTS" />
-          <VideoRow ids={row1} />
-        </div>
-        <div>
-          <SectionLabel label="// MORE CLIPS" />
-          <VideoRow ids={row2} />
+        <div className="flex flex-col gap-4 md:hidden">
+          <div>
+            <SectionLabel label="// CLIPS & HIGHLIGHTS" />
+            <VideoRow ids={row1} />
+          </div>
+          <div>
+            <SectionLabel label="// MORE CLIPS" />
+            <VideoRow ids={row2} />
+          </div>
         </div>
 
         {/* Desktop: 3×2 grid (first 6) */}
-        <div className="hidden md:block -mt-4">
+        <div className="hidden md:block">
           <SectionLabel label="// CLIPS & HIGHLIGHTS" />
           <div className="grid grid-cols-3 gap-3">
             {[...row1, ...row2].slice(0, 6).map((id) => (
