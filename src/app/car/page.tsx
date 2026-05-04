@@ -6,26 +6,27 @@ import * as THREE from 'three'
 import Link from 'next/link'
 
 // ── Input ────────────────────────────────────────────────────────────────────
+// Module-level object so touch buttons outside the Canvas can write to it directly
+const carKeys = { w: false, a: false, s: false, d: false }
+
 function useKeys() {
-  const keys = useRef({ w: false, a: false, s: false, d: false })
   useEffect(() => {
     const dn = (e: KeyboardEvent) => {
-      if (['w','W','ArrowUp'].includes(e.key))    { keys.current.w = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
-      if (['a','A','ArrowLeft'].includes(e.key))  { keys.current.a = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
-      if (['s','S','ArrowDown'].includes(e.key))  { keys.current.s = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
-      if (['d','D','ArrowRight'].includes(e.key)) { keys.current.d = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
+      if (['w','W','ArrowUp'].includes(e.key))    { carKeys.w = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
+      if (['a','A','ArrowLeft'].includes(e.key))  { carKeys.a = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
+      if (['s','S','ArrowDown'].includes(e.key))  { carKeys.s = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
+      if (['d','D','ArrowRight'].includes(e.key)) { carKeys.d = true; if (e.key.startsWith('Arrow')) e.preventDefault() }
     }
     const up = (e: KeyboardEvent) => {
-      if (['w','W','ArrowUp'].includes(e.key))    keys.current.w = false
-      if (['a','A','ArrowLeft'].includes(e.key))  keys.current.a = false
-      if (['s','S','ArrowDown'].includes(e.key))  keys.current.s = false
-      if (['d','D','ArrowRight'].includes(e.key)) keys.current.d = false
+      if (['w','W','ArrowUp'].includes(e.key))    carKeys.w = false
+      if (['a','A','ArrowLeft'].includes(e.key))  carKeys.a = false
+      if (['s','S','ArrowDown'].includes(e.key))  carKeys.s = false
+      if (['d','D','ArrowRight'].includes(e.key)) carKeys.d = false
     }
     window.addEventListener('keydown', dn)
     window.addEventListener('keyup',   up)
     return () => { window.removeEventListener('keydown', dn); window.removeEventListener('keyup', up) }
   }, [])
-  return keys
 }
 
 // ── Car ──────────────────────────────────────────────────────────────────────
@@ -36,7 +37,7 @@ const WHEEL_POS: [number, number, number][] = [
   [ 0.88, -0.18, -1.15],
 ]
 
-function Car({ keysRef }: { keysRef: ReturnType<typeof useKeys> }) {
+function Car() {
   const carRef  = useRef<THREE.Group>(null!)
   const wheelFL = useRef<THREE.Mesh>(null!)
   const wheelFR = useRef<THREE.Mesh>(null!)
@@ -45,7 +46,7 @@ function Car({ keysRef }: { keysRef: ReturnType<typeof useKeys> }) {
 
   useFrame((_, dt) => {
     const v = vel.current
-    const k = keysRef.current
+    const k = carKeys
 
     if (k.w) v.speed = Math.min(v.speed + 270 * dt, 225)
     if (k.s) v.speed = Math.max(v.speed - 249 * dt, -90)
@@ -829,7 +830,7 @@ function World() {
 
 // ── Scene ─────────────────────────────────────────────────────────────────────
 function Scene() {
-  const keys = useKeys()
+  useKeys()
   return (
     <>
       <World />
@@ -837,8 +838,23 @@ function Scene() {
       <DesertZone />
       <BeachZone />
       <RaceTrack />
-      <Car keysRef={keys} />
+      <Car />
     </>
+  )
+}
+
+// ── Mobile button ─────────────────────────────────────────────────────────────
+function CarBtn({ label, onDown, onUp }: { label: string; onDown: () => void; onUp: () => void }) {
+  return (
+    <button
+      className="w-16 h-16 rounded-full bg-black/30 border border-white/25 text-white/80 text-2xl flex items-center justify-center active:bg-white/20 select-none"
+      style={{ touchAction: 'none' }}
+      onTouchStart={e => { e.preventDefault(); onDown() }}
+      onTouchEnd={e => { e.preventDefault(); onUp() }}
+      onTouchCancel={e => { e.preventDefault(); onUp() }}
+    >
+      {label}
+    </button>
   )
 }
 
@@ -850,12 +866,30 @@ export default function CarPage() {
         <Scene />
       </Canvas>
 
-      <div style={{
+      {/* Desktop hint — hidden on mobile */}
+      <div className="hidden md:block" style={{
         position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
         fontFamily: 'monospace', fontSize: 12, color: 'rgba(255,255,255,0.85)',
         background: 'rgba(0,0,0,0.4)', padding: '6px 18px', borderRadius: 4, letterSpacing: '0.05em',
       }}>
         WASD / ARROWS — drive
+      </div>
+
+      {/* Mobile touch controls — hidden on desktop */}
+      <div className="md:hidden" style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 24px 32px',
+      }}>
+        {/* Left: steering */}
+        <div style={{ display: 'flex', gap: 12, pointerEvents: 'auto' }}>
+          <CarBtn label="◄" onDown={() => { carKeys.a = true }} onUp={() => { carKeys.a = false }} />
+          <CarBtn label="►" onDown={() => { carKeys.d = true }} onUp={() => { carKeys.d = false }} />
+        </div>
+        {/* Right: gas / brake */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, pointerEvents: 'auto' }}>
+          <CarBtn label="▲" onDown={() => { carKeys.w = true }} onUp={() => { carKeys.w = false }} />
+          <CarBtn label="▼" onDown={() => { carKeys.s = true }} onUp={() => { carKeys.s = false }} />
+        </div>
       </div>
 
       <Link href="/" style={{

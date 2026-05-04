@@ -132,6 +132,13 @@ export default function SnakePage() {
     draw()
   }, [draw])
 
+  const handleDir = useCallback((d: Dir) => {
+    const s = gs.current
+    if (!s.started) { s.started = true; setStarted(true) }
+    if (d.x === -s.dir.x && d.y === -s.dir.y) return
+    s.nextDir = d
+  }, [])
+
   useEffect(() => {
     draw()
 
@@ -165,16 +172,9 @@ export default function SnakePage() {
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'r' || e.key === 'R') { reset(); return }
-
       const d = KEY_DIRS[e.key]
       if (!d) return
-
-      const s = gs.current
-      if (!s.started) { s.started = true; setStarted(true) }
-      if (d.x === -s.dir.x && d.y === -s.dir.y) return
-      s.nextDir = d
-
-      // prevent page scrolling
+      handleDir(d)
       if (e.key.startsWith('Arrow')) e.preventDefault()
     }
 
@@ -183,7 +183,7 @@ export default function SnakePage() {
       clearInterval(interval)
       window.removeEventListener('keydown', onKey)
     }
-  }, [draw, reset])
+  }, [draw, reset, handleDir])
 
   return (
     <main className="min-h-screen bg-black flex flex-col items-center justify-center gap-5 p-8 font-[kongtext]">
@@ -201,8 +201,40 @@ export default function SnakePage() {
         ref={canvasRef}
         width={W}
         height={H}
-        className="border border-[#00B8D8]/30 shadow-[0_0_40px_rgba(0,184,216,0.12)]"
+        className="border border-[#00B8D8]/30 shadow-[0_0_40px_rgba(0,184,216,0.12)] max-w-full"
+        style={{ touchAction: 'none' }}
       />
+
+      {/* Mobile D-pad — hidden on desktop */}
+      <div className="md:hidden flex flex-col items-center gap-2">
+        <button
+          className="w-14 h-14 rounded-lg bg-[#00B8D8]/10 border border-[#00B8D8]/40 text-[#00B8D8] text-2xl flex items-center justify-center active:bg-[#00B8D8]/25 select-none"
+          style={{ touchAction: 'none' }}
+          onTouchStart={e => { e.preventDefault(); handleDir({ x: 0, y: -1 }) }}
+        >↑</button>
+        <div className="flex gap-2">
+          <button
+            className="w-14 h-14 rounded-lg bg-[#00B8D8]/10 border border-[#00B8D8]/40 text-[#00B8D8] text-2xl flex items-center justify-center active:bg-[#00B8D8]/25 select-none"
+            style={{ touchAction: 'none' }}
+            onTouchStart={e => { e.preventDefault(); handleDir({ x: -1, y: 0 }) }}
+          >←</button>
+          <button
+            className="w-14 h-14 rounded-lg bg-[#00B8D8]/10 border border-[#00B8D8]/40 text-[#00B8D8] text-2xl flex items-center justify-center active:bg-[#00B8D8]/25 select-none"
+            style={{ touchAction: 'none' }}
+            onTouchStart={e => { e.preventDefault(); handleDir({ x: 0, y: 1 }) }}
+          >↓</button>
+          <button
+            className="w-14 h-14 rounded-lg bg-[#00B8D8]/10 border border-[#00B8D8]/40 text-[#00B8D8] text-2xl flex items-center justify-center active:bg-[#00B8D8]/25 select-none"
+            style={{ touchAction: 'none' }}
+            onTouchStart={e => { e.preventDefault(); handleDir({ x: 1, y: 0 }) }}
+          >→</button>
+        </div>
+        <button
+          className="mt-1 px-5 py-2 rounded bg-[#00B8D8]/10 border border-[#00B8D8]/40 text-[#00B8D8] text-xs tracking-widest active:bg-[#00B8D8]/25 select-none"
+          style={{ touchAction: 'none' }}
+          onTouchStart={e => { e.preventDefault(); reset() }}
+        >[ RESTART ]</button>
+      </div>
 
       <Link
         href="/"
