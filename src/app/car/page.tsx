@@ -47,14 +47,14 @@ function Car({ keysRef }: { keysRef: ReturnType<typeof useKeys> }) {
     const v = vel.current
     const k = keysRef.current
 
-    if (k.w) v.speed = Math.min(v.speed + 90 * dt, 75)
-    if (k.s) v.speed = Math.max(v.speed - 83 * dt, -30)
+    if (k.w) v.speed = Math.min(v.speed + 270 * dt, 225)
+    if (k.s) v.speed = Math.max(v.speed - 249 * dt, -90)
 
     v.speed *= Math.pow(0.90, dt * 60)
     if (Math.abs(v.speed) < 0.05) v.speed = 0
 
     const grip    = Math.min(Math.abs(v.speed) / 12, 1)
-    const steerDt = 2.6 * dt * Math.sign(v.speed || 1) * grip
+    const steerDt = 3.5 * dt * Math.sign(v.speed || 1) * grip
     if (k.a) v.angle += steerDt
     if (k.d) v.angle -= steerDt
 
@@ -68,8 +68,8 @@ function Car({ keysRef }: { keysRef: ReturnType<typeof useKeys> }) {
     car.rotation.y  = v.angle
 
     // Camera: pull back further at high speed
-    const camDist = 14 + Math.abs(v.speed) * 0.35
-    const camH    = 8  + Math.abs(v.speed) * 0.08
+    const camDist = 16 + Math.abs(v.speed) * 0.12
+    const camH    = 7  + Math.abs(v.speed) * 0.025
     const behind  = new THREE.Vector3(
       Math.sin(v.angle) * -camDist,
       camH,
@@ -80,7 +80,7 @@ function Car({ keysRef }: { keysRef: ReturnType<typeof useKeys> }) {
   })
 
   return (
-    <group ref={carRef} position={[0, 0.32, 0]}>
+    <group ref={carRef} position={[423, 0.32, -30]}>
       <mesh castShadow position={[0, 0.28, 0]}>
         <boxGeometry args={[1.7, 0.52, 3.6]} />
         <meshLambertMaterial color="#c0392b" />
@@ -497,6 +497,201 @@ function BeachZone() {
   )
 }
 
+// ── Race Track (far east, x > 380, behind cacti) ─────────────────────────────
+function RaceTrack() {
+  // Outer: 304×244 centred at (540,0,0) → x:388–692, z:–122 to 122
+  // Inner grass: 164×104                → x:458–622, z:–52 to 52
+  // Track surface width: 70 units on all sides
+  const CX = 540
+
+  const tyrePosts = useMemo(() => {
+    const out: { x: number; z: number }[] = []
+    const step = 16
+    for (let x = 388; x <= 692; x += step) {
+      out.push({ x, z: -122 })
+      out.push({ x, z:  122 })
+    }
+    for (let z = -106; z <= 106; z += step) {
+      out.push({ x: 388, z })
+      out.push({ x: 692, z })
+    }
+    return out
+  }, [])
+
+  return (
+    <group>
+      {/* Road connector: desert road ends at x=300, track entrance at x=388 */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[344, 0.019, 0]}>
+        <planeGeometry args={[88, 13]} />
+        <meshLambertMaterial color="#252525" />
+      </mesh>
+
+      {/* Sand base under track area */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[CX, 0.004, 0]}>
+        <planeGeometry args={[400, 320]} />
+        <meshLambertMaterial color="#c8a84b" />
+      </mesh>
+
+      {/* Asphalt track surface */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[CX, 0.021, 0]}>
+        <planeGeometry args={[304, 244]} />
+        <meshLambertMaterial color="#1c1c1c" />
+      </mesh>
+
+      {/* Inner grass infield */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[CX, 0.03, 0]}>
+        <planeGeometry args={[164, 104]} />
+        <meshLambertMaterial color="#2d7a2d" />
+      </mesh>
+
+      {/* Outer kerb — north */}
+      {Array.from({ length: 20 }, (_, i) => (
+        <mesh key={`nok${i}`} rotation={[-Math.PI/2,0,0]} position={[390 + i*15 + 7.5, 0.022, -121]}>
+          <planeGeometry args={[15, 2]} />
+          <meshLambertMaterial color={i % 2 === 0 ? '#dd2222' : 'white'} />
+        </mesh>
+      ))}
+      {/* Outer kerb — south */}
+      {Array.from({ length: 20 }, (_, i) => (
+        <mesh key={`sok${i}`} rotation={[-Math.PI/2,0,0]} position={[390 + i*15 + 7.5, 0.022, 121]}>
+          <planeGeometry args={[15, 2]} />
+          <meshLambertMaterial color={i % 2 === 0 ? '#dd2222' : 'white'} />
+        </mesh>
+      ))}
+      {/* Outer kerb — west */}
+      {Array.from({ length: 15 }, (_, i) => (
+        <mesh key={`wok${i}`} rotation={[-Math.PI/2,0,0]} position={[389, 0.022, -112 + i*16 + 8]}>
+          <planeGeometry args={[2, 16]} />
+          <meshLambertMaterial color={i % 2 === 0 ? '#dd2222' : 'white'} />
+        </mesh>
+      ))}
+      {/* Outer kerb — east */}
+      {Array.from({ length: 15 }, (_, i) => (
+        <mesh key={`eok${i}`} rotation={[-Math.PI/2,0,0]} position={[691, 0.022, -112 + i*16 + 8]}>
+          <planeGeometry args={[2, 16]} />
+          <meshLambertMaterial color={i % 2 === 0 ? '#dd2222' : 'white'} />
+        </mesh>
+      ))}
+
+      {/* Inner kerb — north */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <mesh key={`nik${i}`} rotation={[-Math.PI/2,0,0]} position={[458 + i*14 + 7, 0.031, -51]}>
+          <planeGeometry args={[14, 2]} />
+          <meshLambertMaterial color={i % 2 === 0 ? 'white' : '#dd2222'} />
+        </mesh>
+      ))}
+      {/* Inner kerb — south */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <mesh key={`sik${i}`} rotation={[-Math.PI/2,0,0]} position={[458 + i*14 + 7, 0.031, 51]}>
+          <planeGeometry args={[14, 2]} />
+          <meshLambertMaterial color={i % 2 === 0 ? 'white' : '#dd2222'} />
+        </mesh>
+      ))}
+      {/* Inner kerb — west */}
+      {Array.from({ length: 7 }, (_, i) => (
+        <mesh key={`wik${i}`} rotation={[-Math.PI/2,0,0]} position={[459, 0.031, -42 + i*14 + 7]}>
+          <planeGeometry args={[2, 14]} />
+          <meshLambertMaterial color={i % 2 === 0 ? 'white' : '#dd2222'} />
+        </mesh>
+      ))}
+      {/* Inner kerb — east */}
+      {Array.from({ length: 7 }, (_, i) => (
+        <mesh key={`eik${i}`} rotation={[-Math.PI/2,0,0]} position={[621, 0.031, -42 + i*14 + 7]}>
+          <planeGeometry args={[2, 14]} />
+          <meshLambertMaterial color={i % 2 === 0 ? 'white' : '#dd2222'} />
+        </mesh>
+      ))}
+
+      {/* Start/finish checkerboard — west straight at z=0 */}
+      {Array.from({ length: 7 }, (_, xi) =>
+        Array.from({ length: 2 }, (_, zi) => (
+          <mesh key={`sf${xi}${zi}`} rotation={[-Math.PI/2,0,0]}
+                position={[390 + xi*10 + 5, 0.04, -8 + zi*8 + 4]}>
+            <planeGeometry args={[10, 8]} />
+            <meshLambertMaterial color={(xi + zi) % 2 === 0 ? 'white' : '#111'} />
+          </mesh>
+        ))
+      )}
+
+      {/* Yellow centre dashes — north straight z=−86 */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <mesh key={`ynd${i}`} rotation={[-Math.PI/2,0,0]} position={[400 + i*24, 0.035, -86]}>
+          <planeGeometry args={[14, 0.6]} />
+          <meshLambertMaterial color="#e8e830" />
+        </mesh>
+      ))}
+      {/* South straight z=86 */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <mesh key={`ysd${i}`} rotation={[-Math.PI/2,0,0]} position={[400 + i*24, 0.035, 86]}>
+          <planeGeometry args={[14, 0.6]} />
+          <meshLambertMaterial color="#e8e830" />
+        </mesh>
+      ))}
+      {/* West straight x=423 */}
+      {Array.from({ length: 8 }, (_, i) => (
+        <mesh key={`ywd${i}`} rotation={[-Math.PI/2,0,0]} position={[423, 0.035, -76 + i*22]}>
+          <planeGeometry args={[0.6, 12]} />
+          <meshLambertMaterial color="#e8e830" />
+        </mesh>
+      ))}
+      {/* East straight x=657 */}
+      {Array.from({ length: 8 }, (_, i) => (
+        <mesh key={`yed${i}`} rotation={[-Math.PI/2,0,0]} position={[657, 0.035, -76 + i*22]}>
+          <planeGeometry args={[0.6, 12]} />
+          <meshLambertMaterial color="#e8e830" />
+        </mesh>
+      ))}
+
+      {/* Tyre barrier posts around outer perimeter */}
+      {tyrePosts.map((p, i) => (
+        <mesh key={`tb${i}`} position={[p.x, 0.5, p.z]} castShadow>
+          <cylinderGeometry args={[0.65, 0.65, 1, 8]} />
+          <meshLambertMaterial color={i % 3 === 0 ? '#cc2222' : '#111'} />
+        </mesh>
+      ))}
+
+      {/* Grandstand — outside north straight */}
+      {Array.from({ length: 3 }, (_, row) => (
+        <mesh key={`gsr${row}`} position={[CX, row * 2 + 1, -135 - row * 2.5]} castShadow receiveShadow>
+          <boxGeometry args={[200, 2, 4]} />
+          <meshLambertMaterial color={['#1a3a8a', '#162e78', '#1e4299'][row]} />
+        </mesh>
+      ))}
+      {/* Grandstand roof */}
+      <mesh position={[CX, 9.5, -140]} castShadow>
+        <boxGeometry args={[204, 0.5, 18]} />
+        <meshLambertMaterial color="#2a2a2a" />
+      </mesh>
+
+      {/* Pit building — south side */}
+      <mesh position={[CX, 3.5, 138]} castShadow receiveShadow>
+        <boxGeometry args={[220, 7, 8]} />
+        <meshLambertMaterial color="#3a3a3a" />
+      </mesh>
+      {/* Pit lane road */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[CX, 0.025, 129]}>
+        <planeGeometry args={[220, 10]} />
+        <meshLambertMaterial color="#282828" />
+      </mesh>
+      {/* Pit lane white line */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[CX, 0.027, 124]}>
+        <planeGeometry args={[220, 0.5]} />
+        <meshLambertMaterial color="white" />
+      </mesh>
+
+      {/* Flag pole at start/finish */}
+      <mesh position={[388, 4, 0]} castShadow>
+        <cylinderGeometry args={[0.1, 0.1, 8, 6]} />
+        <meshLambertMaterial color="#aaa" />
+      </mesh>
+      <mesh position={[389.5, 7.5, 0]}>
+        <boxGeometry args={[2.5, 1.6, 0.1]} />
+        <meshLambertMaterial color="#cc2222" emissive="#aa0000" emissiveIntensity={0.4} />
+      </mesh>
+    </group>
+  )
+}
+
 // ── World ─────────────────────────────────────────────────────────────────────
 function World() {
   // Road grid: roads at -56, 0, 56 in both axes, width 13
@@ -641,6 +836,7 @@ function Scene() {
       <ForestZone />
       <DesertZone />
       <BeachZone />
+      <RaceTrack />
       <Car keysRef={keys} />
     </>
   )
@@ -650,7 +846,7 @@ function Scene() {
 export default function CarPage() {
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', background: '#a8c8e8' }}>
-      <Canvas shadows camera={{ position: [0, 9, -15], fov: 60, near: 0.1, far: 600 }}>
+      <Canvas shadows camera={{ position: [423, 9, -50], fov: 60, near: 0.1, far: 600 }}>
         <Scene />
       </Canvas>
 
