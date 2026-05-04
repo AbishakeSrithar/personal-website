@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 const COMMANDS: Record<string, string> = {
   snake:   '/snake',
   serious: '/serious',
+  ascii:   '/ascii',
 }
 
 export default function ShhhPage() {
