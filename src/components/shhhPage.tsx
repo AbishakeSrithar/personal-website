@@ -7,6 +7,7 @@ const COMMANDS: Record<string, string> = {
   snake:   '/snake',
   serious: '/serious',
   ascii:   '/ascii',
+  car:     '/car',
 }
 
 export default function ShhhPage() {
