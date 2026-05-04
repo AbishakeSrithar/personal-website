@@ -322,6 +322,190 @@ function PalmTree({ x, z, s = 1, lean = 0 }: { x:number; z:number; s?:number; le
   )
 }
 
+// ── GLSL shaders ─────────────────────────────────────────────────────────────
+
+const WATER_VERT = `
+uniform float uTime;
+uniform float uWaveFreq;
+varying float vElevation;
+void main() {
+  vec4 wp = modelMatrix * vec4(position, 1.0);
+  float e = sin(wp.x * 0.14 * uWaveFreq + uTime * 1.2)  * 0.35
+          + sin(wp.z * 0.11 * uWaveFreq + uTime * 0.85) * 0.25
+          + sin((wp.x + wp.z) * 0.08 * uWaveFreq + uTime * 0.6) * 0.15;
+  vElevation = e;
+  gl_Position = projectionMatrix * modelViewMatrix
+              * vec4(position.x, position.y + e, position.z, 1.0);
+}`
+
+const WATER_FRAG = `
+uniform vec3  uDeepColor;
+uniform vec3  uShallowColor;
+uniform float uOpacity;
+varying float vElevation;
+void main() {
+  float t   = clamp((vElevation + 0.75) / 1.5, 0.0, 1.0);
+  vec3  col = mix(uDeepColor, uShallowColor, t);
+  col = mix(col, vec3(0.88, 0.94, 1.0), smoothstep(0.65, 1.0, t) * 0.35);
+  gl_FragColor = vec4(col, uOpacity);
+}`
+
+const TERRAIN_VERT = `
+uniform float uScale;
+uniform float uAmp;
+varying float vElev;
+float rand(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float noise(vec2 p) {
+  vec2 i = floor(p); vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(rand(i), rand(i + vec2(1.0, 0.0)), f.x),
+             mix(rand(i + vec2(0.0, 1.0)), rand(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float v = 0.0; float a = 0.5;
+  for (int i = 0; i < 4; i++) { v += noise(p) * a; p *= 2.1; a *= 0.5; }
+  return v;
+}
+void main() {
+  vec4  wp = modelMatrix * vec4(position, 1.0);
+  float e  = fbm(wp.xz * uScale) * uAmp;
+  vElev    = e;
+  gl_Position = projectionMatrix * modelViewMatrix
+              * vec4(position.x, position.y + e, position.z, 1.0);
+}`
+
+const TERRAIN_FRAG = `
+uniform vec3  uColorLow;
+uniform vec3  uColorHigh;
+uniform float uAmp;
+varying float vElev;
+void main() {
+  float t = clamp(vElev / uAmp, 0.0, 1.0);
+  gl_FragColor = vec4(mix(uColorLow, uColorHigh, t), 1.0);
+}`
+
+const FIRE_VERT = `
+uniform float uTime;
+varying vec2 vUv;
+void main() {
+  vUv = uv;
+  vec3 p = position;
+  p.x += sin(p.y * 4.0 + uTime * 5.5) * 0.06 * (p.y + 1.0);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+}`
+
+const FIRE_FRAG = `
+uniform float uTime;
+varying vec2  vUv;
+float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p) {
+  vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(h(i), h(i + vec2(1.0, 0.0)), f.x),
+             mix(h(i + vec2(0.0, 1.0)), h(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float v = 0.0; float a = 0.5;
+  for (int i = 0; i < 5; i++) { v += n(p) * a; p *= 2.2; a *= 0.5; }
+  return v;
+}
+void main() {
+  vec2  uv   = vec2(vUv.x, vUv.y - uTime * 0.55);
+  float fire = fbm(uv * 3.5) * pow(1.0 - vUv.y, 1.4)
+             * clamp(1.0 - abs(vUv.x - 0.5) * 2.2, 0.0, 1.0);
+  fire = smoothstep(0.12, 0.85, fire);
+  vec3 col = mix(vec3(1.0, 0.88, 0.05), vec3(1.0, 0.18, 0.0), vUv.y * 1.6);
+  col = mix(col, vec3(0.05, 0.0, 0.0), smoothstep(0.4, 1.0, vUv.y));
+  gl_FragColor = vec4(col, fire * 0.9);
+}`
+
+// ── Animated water surface ────────────────────────────────────────────────────
+function WaterShaderMesh({ position, w, d, deepColor, shallowColor, opacity = 0.88, waveFreq = 1.0, segs = 48 }: {
+  position: [number,number,number]; w: number; d: number
+  deepColor: string; shallowColor: string; opacity?: number; waveFreq?: number; segs?: number
+}) {
+  const matRef = useRef<THREE.ShaderMaterial>(null!)
+  useFrame(({ clock }) => { if (matRef.current) matRef.current.uniforms.uTime.value = clock.getElapsedTime() })
+  return (
+    <mesh rotation={[-Math.PI/2, 0, 0]} position={position}>
+      <planeGeometry args={[w, d, segs, segs]} />
+      <shaderMaterial
+        ref={matRef}
+        vertexShader={WATER_VERT}
+        fragmentShader={WATER_FRAG}
+        transparent
+        uniforms={{
+          uTime:        { value: 0 },
+          uWaveFreq:    { value: waveFreq },
+          uDeepColor:   { value: new THREE.Color(deepColor) },
+          uShallowColor:{ value: new THREE.Color(shallowColor) },
+          uOpacity:     { value: opacity },
+        }}
+      />
+    </mesh>
+  )
+}
+
+// ── FBM noise terrain ─────────────────────────────────────────────────────────
+function TerrainShaderMesh({ position, w, d, colorLow, colorHigh, scale = 0.01, amp = 2.0 }: {
+  position: [number,number,number]; w: number; d: number
+  colorLow: string; colorHigh: string; scale?: number; amp?: number
+}) {
+  const segs = Math.min(Math.round(Math.max(w, d) / 4), 100)
+  return (
+    <mesh rotation={[-Math.PI/2, 0, 0]} position={position} receiveShadow>
+      <planeGeometry args={[w, d, segs, segs]} />
+      <shaderMaterial
+        vertexShader={TERRAIN_VERT}
+        fragmentShader={TERRAIN_FRAG}
+        uniforms={{
+          uScale:    { value: scale },
+          uAmp:      { value: amp },
+          uColorLow: { value: new THREE.Color(colorLow) },
+          uColorHigh:{ value: new THREE.Color(colorHigh) },
+        }}
+      />
+    </mesh>
+  )
+}
+
+// ── Campfire with billboarding GLSL fire ──────────────────────────────────────
+function FireBillboard({ position }: { position: [number,number,number] }) {
+  const billRef = useRef<THREE.Group>(null!)
+  const { camera } = useThree()
+  const fireMat = useMemo(() => new THREE.ShaderMaterial({
+    vertexShader: FIRE_VERT, fragmentShader: FIRE_FRAG,
+    uniforms: { uTime: { value: 0 } },
+    transparent: true, depthWrite: false, side: THREE.DoubleSide,
+  }), [])
+
+  useFrame(({ clock }) => {
+    fireMat.uniforms.uTime.value = clock.getElapsedTime()
+    if (billRef.current)
+      billRef.current.rotation.y = Math.atan2(
+        camera.position.x - position[0],
+        camera.position.z - position[2],
+      )
+  })
+
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.12, 0]} rotation={[0, 0, Math.PI/2]} castShadow>
+        <cylinderGeometry args={[0.14, 0.14, 1.1, 6]} />
+        <meshLambertMaterial color="#3e2723" />
+      </mesh>
+      <mesh position={[0, 0.12, 0]} rotation={[0, Math.PI/3, Math.PI/2]} castShadow>
+        <cylinderGeometry args={[0.14, 0.14, 1.1, 6]} />
+        <meshLambertMaterial color="#3e2723" />
+      </mesh>
+      <group ref={billRef} position={[0, 0.3, 0]}>
+        <mesh position={[0, 1.0, 0]} material={fireMat}><planeGeometry args={[1.8, 2.4]} /></mesh>
+        <mesh position={[0, 1.0, 0]} rotation={[0, Math.PI/2, 0]} material={fireMat}><planeGeometry args={[1.8, 2.4]} /></mesh>
+      </group>
+      <pointLight position={[0, 1.5, 0]} color="#ff7700" intensity={4} distance={16} decay={2} />
+    </group>
+  )
+}
+
 // ── Forest zone (north, z < -100) ─────────────────────────────────────────────
 function ForestZone() {
   const rng = (n: number) => { const x = Math.sin(n * 127.1 + 1) * 43758.5; return x - Math.floor(x) }
@@ -347,15 +531,11 @@ function ForestZone() {
 
   return (
     <group>
-      {/* Forest floor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, -250]}>
-        <planeGeometry args={[500, 300]} />
-        <meshLambertMaterial color="#1b4d1e" />
-      </mesh>
-      {/* Dirt path continuing north road */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.018, -200]}>
+      <TerrainShaderMesh position={[0, 0, -250]} w={500} d={300} colorLow="#1b4d1e" colorHigh="#2d8b30" scale={0.008} amp={1.5} />
+      {/* Dirt path — polygonOffset keeps it on top of displaced terrain */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, -200]}>
         <planeGeometry args={[9, 200]} />
-        <meshLambertMaterial color="#5d4037" />
+        <meshLambertMaterial color="#5d4037" polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
       </mesh>
       {/* Boulders */}
       {boulders.map((b, i) => (
@@ -366,11 +546,8 @@ function ForestZone() {
       ))}
       {/* Pine trees */}
       {trees.map((t, i) => <PineTree key={i} x={t.x} z={t.z} s={t.s} />)}
-      {/* Small lake */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[70, 0.02, -220]}>
-        <circleGeometry args={[22, 20]} />
-        <meshLambertMaterial color="#1a6bb5" transparent opacity={0.85} />
-      </mesh>
+      <WaterShaderMesh position={[70, 0.5, -220]} w={46} d={46} deepColor="#1a5c99" shallowColor="#4ab3e8" opacity={0.88} waveFreq={1.5} segs={32} />
+      <FireBillboard position={[45, 0, -185]} />
     </group>
   )
 }
@@ -384,7 +561,7 @@ function DesertZone() {
     for (let i = 0; i < 65; i++) {
       const x = 115 + rng(i * 6.3) * 270
       const z = (rng(i * 11.7) - 0.5) * 380
-      if (Math.abs(z) < 9) continue
+      if (Math.abs(z) < 9 || z < -100) continue
       out.push({ x, z, s: 0.5 + rng(i * 23.1) * 0.9 })
     }
     return out
@@ -396,15 +573,12 @@ function DesertZone() {
     w: 8  + rng(i * 11) * 20,
     h: 4  + rng(i * 17) * 14,
     d: 8  + rng(i * 23) * 18,
-  })), [])
+  })).filter(m => m.z >= -100), [])
 
   return (
     <group>
-      {/* Sand ground */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[250, 0.005, 0]}>
-        <planeGeometry args={[300, 500]} />
-        <meshLambertMaterial color="#c8a84b" />
-      </mesh>
+      {/* Desert terrain clipped to z ≥ −100 so it doesn't overlap the forest */}
+      <TerrainShaderMesh position={[250, 0, 75]} w={300} d={350} colorLow="#b8923a" colorHigh="#e8c870" scale={0.014} amp={3.5} />
       {/* Road extension east */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[200, 0.018, 0]}>
         <planeGeometry args={[200, 13]} />
@@ -453,16 +627,8 @@ function BeachZone() {
         <planeGeometry args={[500, 220]} />
         <meshLambertMaterial color="#d4b483" />
       </mesh>
-      {/* Shallow water */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 330]}>
-        <planeGeometry args={[600, 60]} />
-        <meshLambertMaterial color="#64b5f6" transparent opacity={0.75} />
-      </mesh>
-      {/* Ocean */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, 430]}>
-        <planeGeometry args={[1000, 280]} />
-        <meshLambertMaterial color="#1565c0" />
-      </mesh>
+      <WaterShaderMesh position={[0, -0.04, 330]} w={600} d={60}  deepColor="#1e88e5" shallowColor="#80d8ff" opacity={0.78} waveFreq={0.8} segs={32} />
+      <WaterShaderMesh position={[0, -0.12, 430]} w={1000} d={280} deepColor="#0d47a1" shallowColor="#1e88e5" opacity={0.95} waveFreq={0.3} segs={48} />
       {/* Road south */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.018, 170]}>
         <planeGeometry args={[13, 140]} />
@@ -699,7 +865,9 @@ function World() {
   const ROAD_OFFSETS = [-56, 0, 56]
   const ROAD_W = 13
   const SIDEWALK_W = 3.5
-  const MAP = 400
+  // MAP=200 keeps the urban ground plane inside the city boundary (±100 units).
+  // Zone connectors handle roads beyond that, eliminating z-fighting with zone terrain.
+  const MAP = 200
 
   const lamps = useMemo(() => {
     const out: { x: number; z: number }[] = []
@@ -732,7 +900,7 @@ function World() {
       {[[-28, -28], [28, 28], [-28, 28], [28, -28]].map(([px, pz], i) => (
         <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[px, 0.01, pz]} receiveShadow>
           <planeGeometry args={[38, 38]} />
-          <meshLambertMaterial color="#3a7d34" />
+          <meshLambertMaterial color="#3a7d34" polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
         </mesh>
       ))}
 
@@ -740,14 +908,14 @@ function World() {
       {ROAD_OFFSETS.map(rz => (
         <mesh key={rz} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, rz]}>
           <planeGeometry args={[MAP, ROAD_W]} />
-          <meshLambertMaterial color="#252525" />
+          <meshLambertMaterial color="#252525" polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
         </mesh>
       ))}
       {/* ── Roads (vertical — run along X axis) ── */}
       {ROAD_OFFSETS.map(rx => (
         <mesh key={rx} rotation={[-Math.PI / 2, 0, 0]} position={[rx, 0.015, 0]}>
           <planeGeometry args={[ROAD_W, MAP]} />
-          <meshLambertMaterial color="#252525" />
+          <meshLambertMaterial color="#252525" polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
         </mesh>
       ))}
 
@@ -757,7 +925,7 @@ function World() {
           <mesh key={`${rz}-${side}`} rotation={[-Math.PI / 2, 0, 0]}
                 position={[0, 0.025, rz + side * (ROAD_W / 2 + SIDEWALK_W / 2)]}>
             <planeGeometry args={[MAP, SIDEWALK_W]} />
-            <meshLambertMaterial color="#7a7a7a" />
+            <meshLambertMaterial color="#7a7a7a" polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
           </mesh>
         ))
       )}
@@ -766,7 +934,7 @@ function World() {
           <mesh key={`${rx}-${side}`} rotation={[-Math.PI / 2, 0, 0]}
                 position={[rx + side * (ROAD_W / 2 + SIDEWALK_W / 2), 0.025, 0]}>
             <planeGeometry args={[SIDEWALK_W, MAP]} />
-            <meshLambertMaterial color="#7a7a7a" />
+            <meshLambertMaterial color="#7a7a7a" polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
           </mesh>
         ))
       )}
@@ -775,10 +943,10 @@ function World() {
       {[-80,-60,-40,-20,20,40,60,80].map(t =>
         ROAD_OFFSETS.map(r => [
           <mesh key={`hd-${r}-${t}`} rotation={[-Math.PI/2,0,0]} position={[t, 0.03, r]}>
-            <planeGeometry args={[6, 0.3]} /><meshLambertMaterial color="#e8e830" />
+            <planeGeometry args={[6, 0.3]} /><meshLambertMaterial color="#e8e830" polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
           </mesh>,
           <mesh key={`vd-${r}-${t}`} rotation={[-Math.PI/2,0,0]} position={[r, 0.03, t]}>
-            <planeGeometry args={[0.3, 6]} /><meshLambertMaterial color="#e8e830" />
+            <planeGeometry args={[0.3, 6]} /><meshLambertMaterial color="#e8e830" polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
           </mesh>,
         ])
       )}
